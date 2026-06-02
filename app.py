@@ -15,7 +15,7 @@ from news_agent import run
 
 # ── Page config ────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="NewsLens",
+    page_title="News Skimmer",
     page_icon="🗞️",
     layout="centered",
 )
@@ -66,7 +66,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Hero ───────────────────────────────────────────────────────────────────
-st.markdown('<div class="hero-title">🗞️ NewsLens</div>', unsafe_allow_html=True)
+st.markdown('<div class="hero-title">🗞️ News Skimmer</div>', unsafe_allow_html=True)
 st.markdown('<div class="hero-sub">AI-powered news digest — fetch, summarize, and understand any topic instantly.</div>', unsafe_allow_html=True)
 
 st.markdown("""
