@@ -78,15 +78,19 @@ st.markdown("""
 
 st.divider()
 
+# ── Session state init ────────────────────────────────────────────────────
+if "topic" not in st.session_state:
+    st.session_state.topic = ""
+
 # ── Suggested topics ───────────────────────────────────────────────────────
 st.markdown("**💡 Try a topic:**")
 suggested = ["Artificial Intelligence", "Climate Change", "Space Exploration", "Cybersecurity", "Stock Market"]
 
 cols = st.columns(len(suggested))
-selected_suggestion = None
 for i, topic in enumerate(suggested):
     if cols[i].button(topic, use_container_width=True):
-        selected_suggestion = topic
+        st.session_state.topic = topic
+        st.rerun()
 
 # ── Input ──────────────────────────────────────────────────────────────────
 st.markdown("**Or type your own:**")
@@ -94,16 +98,20 @@ query = st.text_input(
     label="topic",
     placeholder="e.g. electric vehicles, quantum computing, Olympics...",
     label_visibility="collapsed",
-    value=selected_suggestion or "",
+    value=st.session_state.topic,
+    key="topic_input",
 )
+
+# Keep session state in sync with manual typing
+st.session_state.topic = query
 
 search_clicked = st.button("🔍 Get Digest", type="primary", use_container_width=True)
 
 # ── Run agent ──────────────────────────────────────────────────────────────
-if search_clicked and query.strip():
+if search_clicked and st.session_state.topic.strip():
     with st.spinner("📡 Fetching headlines and generating digest..."):
         try:
-            result = run(query.strip())
+            result = run(st.session_state.topic.strip())
 
             st.success("✅ Digest ready!")
             st.markdown(f'<div class="result-box">{result}</div>', unsafe_allow_html=True)
@@ -111,12 +119,12 @@ if search_clicked and query.strip():
             # Save to history
             if "history" not in st.session_state:
                 st.session_state.history = []
-            st.session_state.history.insert(0, {"topic": query.strip(), "result": result})
+            st.session_state.history.insert(0, {"topic": st.session_state.topic.strip(), "result": result})
 
         except Exception as e:
             st.error(f"❌ Error: {str(e)}")
 
-elif search_clicked and not query.strip():
+elif search_clicked and not st.session_state.topic.strip():
     st.warning("Please enter a topic first.")
 
 # ── History ────────────────────────────────────────────────────────────────
