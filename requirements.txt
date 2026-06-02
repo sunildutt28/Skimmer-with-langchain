@@ -1,0 +1,9 @@
+langchain
+langchain-groq
+langchain-core
+langgraph
+transformers
+torch
+sentencepiece
+requests
+streamlit
